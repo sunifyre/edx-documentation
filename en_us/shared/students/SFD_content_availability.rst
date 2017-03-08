@@ -1,19 +1,19 @@
 .. _course_content_availability:
 
-########################################################
-Understanding Course Content Availability and Scheduling
-########################################################
+##########################
+Accessing Course Content
+##########################
 
-When you begin a course, on the **Course** page you can see the sections of the
-course content in the course navigation pane. You can view the sections in the
-course, select each one to view its subsections, and select the subsections to
-view the course material .
+When you begin a course, select the **Course** page to see the structure of
+the course. From this page, you can select and jump to that part of the course
+content. If you have previously accessed or worked in the course, select
+**Resume Course** to jump to the part of the course that you last accessed.
 
-In some courses, all of the sections of the course content are visible in the
-course navigation pane when you open the course for the first time. In other
-courses, additional content becomes available as you work, either because it
-was scheduled for release on a specific date, or because you completed required
-content that allowed you to proceed to further content.
+Be aware that in some courses, not all of the the course content is available
+at the beginning of the course. Instead, additional content might become
+available as you work, either because it was scheduled for release on a
+specific date, or because you completed required content that allowed you to
+proceed to further content.
 
 * In some courses, the course team schedules the dates on which the sections of
   the course content are available to you. On the date that the course team
