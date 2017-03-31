@@ -1,16 +1,14 @@
 .. _edx_user_interfaces:
 
-##############################
+##########################
 Developing User Interfaces
-##############################
+##########################
 
 This section provides information about developing user interfaces (UI) for edX
 applications.
 
-All new edX pages should be composed of elements and styling shown in the edX
-Pattern Library. You can use JavaScript from the edX UI Toolkit JavaScript
-library to implement pages in a way that is consistent with edX UI
-architecture.
+The Open edX wiki includes additional details about developing edX user
+interfaces. For more information, see `edX Front End Development`_.
 
 .. Add an overview of the current architecture.
 .. * Django views generated using Mako templates
@@ -32,10 +30,112 @@ architecture.
 .. 20160518 - any important information about UI development should be moved
 .. from the wiki to the developer's guide here.
 
-The Open edX wiki includes additional details about developing edX user
-interfaces. For more information, see `edX Front End Development`_.
 
-.. _pattern_library:
+**************
+Best Practices
+**************
+
+There are a number of best practices to consider before starting to develop
+a new user interface.
+
+1. **Use server-side rendering whenever possible**
+
+   Rationale: Server-side rendering gives the content to the user
+   immediately without requiring additional round-trips. This can make
+   for large performance improvements on slow networks or mobile devices.
+
+   When a dynamic client-side experience is required, then the server-side
+   page should include JavaScript code along with the HTML. See the
+   technical recommendations below for more detail.
+
+2. **Front-ends should be self-contained**
+
+   Rationale: Front end applications require a variety of types of assets
+   that need to be managed together, including code, styles, templates, and
+   images. For Django apps and XBlocks, all of these assets should live
+   within the app's or block's own directory rather than being located
+   in shared locations within the consuming application. Ideally, apps or blocks
+   should live in their own repository and should be pip installed into
+   the main application.
+
+3. **Designs should be built upon patterns from the edX Pattern Library**
+
+   Rationale: The edX Pattern Library is a collection of web application
+   components and visual styles that can be used to develop UIs that are
+   consistent with the edX platform. Using the pattern library ensures that
+   web applications follow best practices for user experience, theming,
+   and accessibility.
+
+   You can learn more in the section `Using the edX Pattern Library`_.
+
+4. **Front-ends should consume and extract reusable UI components**
+
+   Rationale: when developing new applications, developers should prefer
+   reuse of existing components over building custom front end logic.
+   If a new component is required, it should be built as a new reusable
+   addition to the edX UI Toolkit`, based upon patterns from the
+   edX Pattern Library. This ensures that future development can
+   reuse this component, while also standardizing how it behaves
+   for the user in terms of user interface, accessibility, theming
+   and so on.
+
+   You can learn more in the section `Using the edX UI Toolkit`_.
+
+6. **Features should work equally well on mobile and web platforms**
+
+   Rationale: Open edX provides iOS and Android applications in addition
+   to its web applications, and so new learner features need to be implemented
+   for all three platforms. The simplest way to achieve feature parity is to
+   provide a responsive web experience that can be used on phones and tablets
+   as well as on desktops and laptops. The edx Pattern Library helps with
+   this by providing a responsive grid system along with components that
+   work equally well on mobile and web.
+
+7. **Designs should be fully accessible**
+
+   Rationale: Open edX measures and evaluates accessibility using the World
+   Wide Web Consortium’s `Web Content Accessibility Guidelines (WCAG) 2.0`_.
+   All features merged into edX repositories are expected to conform to
+   Level AA of this specification and to satisfy the requirements outlined in
+   the `edX Website Accessibility Policy`_.
+
+   You can learn more about developing accessible applications in
+   the chapter :doc:`../conventions/accessibility`.
+
+8. **Front end applications should support internationalization**
+
+   Rationale: Open edX is used by learners all over the world, and so
+   it is critical that all new functionality can be localized. This means
+   that every string in an application should be marked for translation,
+   and also includes ensuring that all new user interfaces will switch to
+   right-to-left mode when the language requires it.
+
+   You can learn more about internationalization in the section
+   :doc:`../conventions/internationalization/index`.
+
+9. **Front end implementations should support theming**
+
+   Rationale: Open edX is used by organizations around the world,
+   and each one requires that the user experience is based upon their
+   own brand. This includes elements as simple as overriding the fonts,
+   imagery and color schemes, to more complex customization of headers,
+   footers and registration flows.
+
+   One simple way to make your interface support theming is to use the patterns
+   from the edX Pattern Library. You can learn more about how Open edX supports
+   theming with the guide `Changing Themes for an Open edX Site`_.
+
+10. **Front end code should be safe from cross site scripting**
+
+   Cross Site Scripting (XSS) vulnerabilities allow user-supplied data to be
+   incorrectly executed as code in a web browser. This can allow an attacker
+   to inject malicious scripts, which in the worst case can cause the loss
+   of private user data.
+
+   In order to keep your code safe from such attackers, you should follow the
+   best practices laid out in the chapter :doc:`../conventions/safe_templates`.
+
+.. _Using the edX Pattern Library:
 
 *****************************
 Using the edX Pattern Library
@@ -133,9 +233,9 @@ For more information about writing JavaScript for edX UIs, see
 
 .. _adding_a_new_ui_page:
 
-********************
+****************
 Adding a UI Page
-********************
+****************
 
 This topic is a collection of things to think about when creating a new page
 in Studio or the LMS.
@@ -464,6 +564,14 @@ structure your Backbone code.
 .. _Teams courseware tab (LMS): https://github.com/edx/edx-platform/blob/master/lms/djangoapps/teams/static/teams/js/views/teams_tab.js
 
 .. _semver.org: http://semver.org/
+
+.. _Changing Themes for an Open edX Site: http://edx.readthedocs.io/projects/edx-installing-configuring-and-running/en/open-release-eucalyptus.master/configuration/changing_appearance/theming/index.html
+
+.. _edX UI Toolkit: http://ui-toolkit.edx.org/
+
+.. _edX Website Accessibility Policy: https://www.edx.org/accessibility
+
+.. _Web Content Accessibility Guidelines (WCAG) 2.0: http://www.w3.org/TR/WCAG/
 
 .. _
 
