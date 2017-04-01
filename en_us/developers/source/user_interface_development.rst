@@ -7,8 +7,12 @@ Developing User Interfaces
 This section provides information about developing user interfaces (UI) for edX
 applications.
 
-The Open edX wiki includes additional details about developing edX user
-interfaces. For more information, see `edX Front End Development`_.
+Open edX is a large platform that implements its user interfaces in a variety of
+ways. The major applications (Studio, LMS, Insights, Otto) are built as Django
+views that return rendered pages consisting of HTML, CSS and JavaScript. In
+addition, components can be created with `XBlocks`_ which use Python code to
+render themselves as HTML fragments along with their CSS and JavaScript
+dependencies.
 
 .. Add an overview of the current architecture.
 .. * Django views generated using Mako templates
@@ -21,6 +25,9 @@ interfaces. For more information, see `edX Front End Development`_.
 
 .. Add a performance section that explains best practices for ensuring
 .. performant pages.
+
+The Open edX wiki includes additional details about developing edX user
+interfaces. For more information, see `edX Front End Development`_.
 
 .. contents::
  :local:
@@ -135,6 +142,132 @@ a new user interface.
    In order to keep your code safe from such attackers, you should follow the
    best practices laid out in the chapter :doc:`../conventions/safe_templates`.
 
+********************
+Technology Standards
+********************
+
+The following is the current recommendation for technologies to use when
+developing new user interfaces. It is important to always use the best tool for
+the task at hand, so there will be situations where an alternative approach or
+technology should be adopted.
+
+For each of these recommendations, see `OEP-11: Front End Technology Standards`_
+for more detail along with justifications, and :ref:`edx_javascript_guidelines`
+for how to write the code.
+
+1. **Server-side content should be rendered with Django Templates**
+
+   **Rationale**: There are many template languages available for Django,
+   but the simplest option is to use the built-in Django template engine.
+   The Open edX codebase has a mixture of Django and Mako templates, but the
+   former are easier to reason about because they don't support arbitrary
+   code evaluation.
+
+   **Exception**: Mako templates can continue to be used within edx-platform
+   for consistency with the existing code base. This is because the base
+   templates and theming support are all provided via Mako, so it is too
+   much to expect a new feature to be implemented with a different framework.
+   There is much desire to replace Mako within edx-platform so this
+   exception may eventually be removed.
+
+2. **Target the latest standardised JavaScript version (ECMA-262)**
+
+   **Rationale**: edX JavaScript should be written consistent with the latest
+   ECMA-262 specification in order to ensure future support, the largest
+   community and the availability of modern features. To support this syntax
+   in older browsers, use `Babel`_. Babel may also be configured to add syntax
+   extensions widely adopted by the community of our recommended framework
+   (e.g., `JSX`_).
+
+   **Exception**: Much of edX's existing front end code is written conformant
+   to the version of ECMA-262 released in 2009 (ES5). Files written in ES5
+   should be gradually converted to the newer standard as new development in
+   those feature areas requires.
+
+   **Note**: edX previously used CoffeeScript, but its use has now been
+   deprecated. Community interest in TypeScript has also grown, but it and
+   other languages that do not follow the ECMA-262 spec should not be used.
+
+3. **JavaScript libraries should be installed via npm**
+
+   **Rationale**: It is important that JavaScript libraries are kept
+   up-to-date, and one key component is to make it as simple as possible
+   to perform upgrades. Projects that use npm maintain all of their
+   library requirements in a single `package.json` file, which can be
+   easily changed as the versions change.
+
+4. **JavaScript code should follow the edX ESLint configuration**
+
+   **Rationale**: In order to standardize and enforce Open edX's JavaScript
+   coding style across multiple codebases, edX has published an ESLint
+   configuration that provides an enforceable specification. The
+   `edX ESLint Config`_ is made available as an npm package that can be
+   installed into any Open edX package.
+
+   **Exception**: The `edX ESLint Config for ES5`_ may be used where ES5
+   is in use. Both configs may be used in the same codebase through the
+   use of `ESLint configuration cascading`_.
+
+5. **Use React and Redux when building new client-side applications**
+
+   **Rationale**: React should be used for building new UIs, as it is
+   widely adopted by the community and strikes a balance between
+   flexibility and feature richness. For state management of complex
+   client-side interactions, Redux should be used. This library was chosen
+   because it sees strong use in the React community, but is also flexible
+   enough to be used in situations where a hybrid React/Backbone architecture
+   exists.
+
+   See `React at edX`_ for more details on the evaluation process that led to
+   this technology selection. Other modern frameworks considered for use
+   included Polymer and Angular. See `Reasons for rejecting Angular`_  and
+   `Reasons for rejecting Polymer`_ for an exploration of why these
+   alternatives do not work as well as React for edX.
+
+   **Exception**: When building new applications within edx-platform, it
+   is currently acceptable to use Backbone.  Backbone is a somewhat old
+   technology in the JavaScript world and has seen a rapid drop off in usage
+   within the community. The plan is to incrementally adopt React within
+   edx-platform as it can interoperate cleanly with Backbone. More
+   documentation on this plan can be found in
+   `Modernizing the edX front end stack`_.
+
+6. **JavaScript should be bundled using Webpack**
+
+   **Rationale**: `Webpack`_ is the tool of choice for code optimization and
+   bundling, as it is widely used throughout the industry, and because
+   it seamlessly handles modern code bases as well as all of the older
+   technologies used by edX, such as `AMD Modules`_. Webpack should be
+   implemented to handle as much of the "asset pipeline" as possible,
+   rather than passing this responsibility on to Django.
+
+   **Exception**: Existing code bases that use `RequireJS`_ and
+   `RequireJS Optimizer`_ can continue to do so, but opportunities should
+   be sought to switch over to Webpack.
+
+7. **JavaScript dependencies should be managed with ES2015 Modules**
+
+   **Rationale**: JavaScript module systems allow front end code to specify
+   its dependencies and be grouped into bundles that minimize the assets
+   needed to provide page functionality. The most prevalent module syntax
+   is currently `ES2015 Modules`_, which should be adopted everywhere
+   edX code is written to the ES2015 spec or later.
+
+   **Exception**: Much of edX's existing (ES5) JavaScript uses the older
+   `AMD Modules`_ syntax for modules. AMD Modules are interoperable
+   with ES2015 Modules if Webpack is used for bundling, so AMD is an
+   acceptable module definition if the code must remain ES5.
+
+8. **CSS should be generated using Sass**
+
+   **Rationale**: Sass's SCSS syntax is an extension of CSS that adds power
+   and elegance to the basic language. It makes the maintenance of large
+   CSS files more manageable though the ability to use variables, mixins,
+   imports and more. In particular, it makes theming possible with the
+   ability to override variables that define colors, fonts etc.
+
+   You can find out more about Sass in the official `Sass documentation`_.
+
 .. _Using the edX Pattern Library:
 
 *****************************
@@ -166,7 +299,7 @@ parameters.
 When you create a page using the Pattern Library, create two new root
 syntactically awesome style sheets (Sass) files for your page, one for left-to-
 right (LTR) and one for right-to-left (RTL) localizations. For more information
-about Sass, see the `Sass site`_.
+about Sass, see the `Sass documentation`_.
 
 The RTL version of the style sheet must have the same filename as the
 LTR version but ending with ``-rtl``.
@@ -228,9 +361,6 @@ The UI toolkit consists of:
 The edX UI Toolkit is available from the `edx-ui-toolkit GitHub repository`_ .
 For more information about the UI Toolkit, see `ui-toolkit.edx.org`_ .
 
-For more information about writing JavaScript for edX UIs, see
-:ref:`edx_javascript_guidelines`.
-
 .. _adding_a_new_ui_page:
 
 ****************
@@ -246,120 +376,6 @@ more general best practices, as well as how to submit your new code for review.
 .. contents::
  :local:
  :depth: 2
-
-======================================
-Use JavaScript Instead of CoffeeScript
-======================================
-
-The edX front end code base is currently a mixture of CoffeeScript and
-JavaScript. The edX development team is now standardizing the use of JavaScript
-for new work. There are a number of reasons for this decision, including the
-following list.
-
-* It is hard to jump back and forth between the two syntaxes.
-
-* It adds a compilation step which slows down iterative development.
-
-* Most third party libraries are implemented and documented in
-  JavaScript.
-
-* Client-side debugging is done in JavaScript, which makes it hard to correlate
-  to the original code.
-
-* The diff-cover tools are not compatible with CoffeeScript so code coverage is
-  not tracked.
-
-* A lot of the traditional benefits of CoffeeScript can now be achieved using
-  JavaScript libraries.
-
-All new front end development should be done in JavaScript, while legacy
-CoffeeScript code will be converted on an as-needed basis. For pragmatic
-reasons, targeted changes to CoffeeScript will still be accepted.
-
-For more information about writing JavaScript for edX UIs, see
-:ref:`edx_javascript_guidelines`.
-
-.. _use_requirejs_to_manage_file_dependencies:
-
-=========================================
-Use RequireJS to Manage File Dependencies
-=========================================
-
-All new pages should use `RequireJS`_ to manage loading
-of file dependencies.
-
-* Use the standard syntax to load JavaScript dependencies.
-
-  .. note::
-
-      For the LMS, you have to wrap each call to define or require in
-      order for it to work with the namespaced version of RequireJS.
-
-  .. code-block:: javascript
-
-    ;(function (define) {
-        'use strict';
-        define([...], function (...) {
-            ...
-        });
-    }).call(this, define || RequireJS.define);
-
-* Use RequireJS Text for your templates (see
-  :ref:`requirejs_optimization_javascript` for details).
-
-* Create a factory class that is included by your Mako template using
-  ``require_module``.
-
-    * This Mako function ensures that the factory is loaded correctly for both
-      the optimized and non-optimized pipeline.
-
-    * When accessed in the optimized mode, the query parameter ``?raw`` will be
-      added to the URL to ensure that the file is not post-processed.
-
-  .. note::
-
-     ``require_module`` is needed for the unified optimizer pipeline in Studio.
-
-* If you need server-side data passed to your page, pass it as one or more
-  parameters to your factory.
-
-  For information about avoiding cross-site scripting, see :ref:`JavaScript
-  Context in Mako`.
-
-* For information about adding third-party JavaScript libraries, see
-  :ref:`adding_javascript_libraries`.
-
-* If the dependency is pre-loaded, then be sure to specify its path as empty in
-  build.js so that the optimizer does not include it in the bundled file. This
-  is especially important for files that are used by both by JavaScript
-  leveraging RequireJS and "non-RequireJS JavaScript" within the same page.
-
-  .. code-block:: javascript
-
-    paths: {
-        'gettext': 'empty:',
-        'jquery': 'empty:',
-        ...
-    }
-
-See an example Mako code block in :ref:`JavaScript Context in Mako`.
-
-The following list includes more examples.
-
-* `Studio Course Outline (Studio)`_
-
-* `Courseware Search (LMS)`_
-
-* `Student Notes (LMS)`_
-
-* `Teams courseware tab (LMS)`_
-
-.. note::
-
-    Using RequireJS in XBlocks is not currently supported. Future development
-    is planned to add this support.
-
-.. _adding_javascript_libraries:
 
 ===========================
 Adding JavaScript Libraries
@@ -410,168 +426,52 @@ directory.
 
 .. _use_underscore_and_requirejs_text:
 
-===========================================================
-Use Underscore and RequireJS Text for Client-Side Templates
-===========================================================
+===========================
+Working with LMS and Studio
+===========================
 
-The edX development team has standardized using Underscore for all client-side
-templates. There are some things to consider.
-
-* Add your templates to a static/templates directory in your Django app.
-
-* If you need mock HTML for Jasmine, put them in a subdirectory named ``mock``.
-
-* Use :ref:`RequireJS Text <use_underscore_and_requirejs_text>` to load your
-  templates (note that most code today statically includes the template in the
-  page).
-
-RequireJS Text is superior to the old mechanism of statically
-including the templates in the Mako-generated HTML for several reasons.
-
-* Mako templates no longer need to explicitly include every template that is
-  needed in the HTML.
-
-* The template lookup is much faster when optimized for production use because
-  JavaScript code does not have to extract the templates it needs from the DOM.
-  For developers, the templates are fetched asynchronously like any other
-  RequireJS dependency.
-
-* The templates get included in the minified .js file for the page so the
-  content is only downloaded once and then cached in the browser. Including the
-  template in the Mako template causes it to be downloaded every time.
-
-* Unit tests do not need to load all the templates into fixtures for the views
-  to work, as the view will load its template dependencies directly.
-
-Here are a few examples.
-
-* `Paging Header component`_
-
-* `Teams topic card`_
-
-.. _requirejs_optimization_javascript:
-
-============================================================
-Ensure That RequireJS Optimizer Can Optimize Your JavaScript
-============================================================
-
-We use `RequireJS Optimizer`_ to optimize the JavaScript that we use in
-production. This works as part of the production pipeline to merge all of a
-page's JavaScript and templates into a single minified file. This greatly
-reduces the number of files that the browser needs to request, as well as the
-number of bytes that need to be fetched. Furthermore, in the LMS un-optimized
-RequireJS files are never cached, leading to significant performance
-degradation.
-
-The basic approach is to move all of the page view construction logic into a
-single factory file. This factory is responsible for creating the models and
-views required to render the page. The idea is that the optimizer can produce a
-single minified file for the factory by statically determining all of its
-dependencies.
-
-* Structure your page so that it has a single root factory file (see
-  :ref:`use_requirejs_to_manage_file_dependencies`).
-
-  Be sure to use ``require_module`` to load the factory as described above.
-
-* List your factory in the RequireJS Optimizer build file.
-
-    * `Studio build file`_
-
-    * `LMS build file`_
-
-* By default, devstack runs with unoptimized files so that changes are picked
-  up immediately.
-
-  To run with optimized files, specify the ``--optimized`` parameter to Paver's
-  ``devstack`` command:
-
-  .. code-block:: bash
-
-    paver devstack lms --optimized
-
-* Note that Bokchoy tests run with optimized files to verify that they are
-  being generated as expected.
-
-* Be sure to test your page in a production environment, checking that all
-  dependencies are included in the optimized factory file.
-
-    * For LMS files, take care that all of the JS files have a MD5 hash code
-      between their filename and the js extension. Files without MD5 hash codes
-      will not be cached in production and indicate incorrect optimization.
-
-    * Studio RequireJS files currently do not use the MD5 hashing mechanism,
-      and instead store files within a unique directory that changes with each
-      release. We hope to change this in the future.
-
-=================================
-Use Backbone to Build Your New UI
-=================================
-
-Code written with Backbone is more modular, more extensible, and more easily
-unit tested with Jasmine.
-
-See `How to add a new feature to LMS or Studio`_ to see how to
-structure your Backbone code.
-
-.. TODO: move the content from the wiki page into the developer's guide.
+The code base for LMS and Studio does not follow all of these best practices
+as it has been developed over a number of years. There is material on the
+Open edX wiki describing how to work in that code. See
+`How to add a new feature to LMS or Studio`_ for more details.
 
 .. Link destinations
 
-.. _example web page: https://github.com/edx/edx-platform/blob/master/lms/templates/ux/reference/pattern-library-test.html
-
-.. _Studio build file: https://github.com/edx/edx-platform/blob/master/cms/static/build.js#L24
-
-.. _LMS build file: https://github.com/edx/edx-platform/blob/master/lms/static/lms/js/build.js
-
-.. _RequireJS Optimizer: http://requirejs.org/docs/optimization.html
-
-.. _Teams topic card: https://github.com/edx/edx-
-  platform/blob/master/lms/djangoapps/teams/static/teams/js/views/topics.js
-
-.. _Paging Header component: https://github.com/edx/edx- platform/blob/master/common/static/common/js/components/views/paging_header.js
-
-.. _common/static/js/vendor: https://github.com/edx/edx-platform/tree/master/common/static/js/vendor
-
 .. _/pavelib/assets.py: https://github.com/edx/edx-platform/blob/master/pavelib/assets.py#L47
-
-.. _lms/static/lms/js/require-config.js: https://github.com/edx/edx-platform/blob/master/lms/static/lms/js/require-config.js#L51>
-
-.. _list of npm-installed libraries: https://github.com/edx/edx-platform/blob/master/pavelib/assets.py#L43
-
-.. _How to add a new feature to LMS or Studio: https://openedx.atlassian.net/wiki/display/AC/How+to+add+a+new+feature+to+LMS+or+Studio
-
-.. _npmjs.com: https://www.npmjs.com/
-
-.. _edX Front End Development: https://openedx.atlassian.net/wiki/display/FEDX/edX+Front+End+Development
-
-.. _Sass site: http://sass-lang.com/
-
-.. _lms/envs/common.py: https://github.com/edx/edx-platform/blob/master/lms/envs/common.py#L1373
-
-.. _Pattern Library test page: https://github.com/edx/edx-platform/blob/master/lms/templates/ux/reference/pattern-library-test.html
-
-.. _PR 12380: https://github.com/edx/edx-platform/pull/12380
-
-.. _RequireJS: http://requirejs.org/
-
-.. _Studio Course Outline (Studio): https://github.com/edx/edx-platform/blob/master/cms/static/js/views/pages/course_outline.js
-
-.. _Courseware Search (LMS): https://github.com/edx/edx-platform/blob/master/lms/static/js/search/course/views/search_results_view.js
-
-.. _Student Notes (LMS): https://github.com/edx/edx-platform/blob/master/lms/static/js/edxnotes/views/notes_factory.js
-
-.. _Teams courseware tab (LMS): https://github.com/edx/edx-platform/blob/master/lms/djangoapps/teams/static/teams/js/views/teams_tab.js
-
-.. _semver.org: http://semver.org/
-
+.. _AMD Modules: https://github.com/amdjs/amdjs-api/wiki/AMD
+.. _Angular: https://angular.io/
+.. _Babel: https://babeljs.io/
 .. _Changing Themes for an Open edX Site: http://edx.readthedocs.io/projects/edx-installing-configuring-and-running/en/open-release-eucalyptus.master/configuration/changing_appearance/theming/index.html
-
+.. _common/static/js/vendor: https://github.com/edx/edx-platform/tree/master/common/static/js/vendor
+.. _Courseware Search (LMS): https://github.com/edx/edx-platform/blob/master/lms/static/js/search/course/views/search_results_view.js
+.. _edX ESLint Config for ES5: https://github.com/edx/eslint-config-edx/tree/master/packages/eslint-config-edx-es5
+.. _edX ESLint Config: https://github.com/edx/eslint-config-edx/tree/master/packages/eslint-config-edx
+.. _edX Front End Development: https://openedx.atlassian.net/wiki/display/FEDX/edX+Front+End+Development
 .. _edX UI Toolkit: http://ui-toolkit.edx.org/
-
 .. _edX Website Accessibility Policy: https://www.edx.org/accessibility
-
+.. _ES2015 Modules: http://www.ecma-international.org/ecma-262/6.0/#sec-imports
+.. _ESLint configuration cascading: http://eslint.org/docs/user-guide/configuring#configuration-cascading-and-hierarchy
+.. _How to add a new feature to LMS or Studio: https://openedx.atlassian.net/wiki/display/AC/How+to+add+a+new+feature+to+LMS+or+Studio
+.. _JSX: https://facebook.github.io/react/docs/introducing-jsx.html
+.. _Modernizing the edX front end stack: https://openedx.atlassian.net/wiki/display/FEDX/Modernizing+the+edX+front+end+stack
+.. _OEP-11: Front End Technology Standards: http://open-edx-proposals.readthedocs.io/en/latest/oep-0011.html
+.. _PR 12380: https://github.com/edx/edx-platform/pull/12380
+.. _Pattern Library test page: https://github.com/edx/edx-platform/blob/master/lms/templates/ux/reference/pattern-library-test.html
+.. _Polymer: https://www.polymer-project.org/
+.. _React at edX: https://openedx.atlassian.net/wiki/display/FEDX/React+at+edX
+.. _React: https://github.com/facebook/react
+.. _RequireJS Optimizer: http://requirejs.org/docs/optimization.html
+.. _RequireJS: http://requirejs.org/
+.. _Sass documentation: http://sass-lang.com/
+.. _Typescript: https://www.typescriptlang.org/
 .. _Web Content Accessibility Guidelines (WCAG) 2.0: http://www.w3.org/TR/WCAG/
+.. _Webpack: https://webpack.github.io/
+.. _example web page: https://github.com/edx/edx-platform/blob/master/lms/templates/ux/reference/pattern-library-test.html
+.. _list of npm-installed libraries: https://github.com/edx/edx-platform/blob/master/pavelib/assets.py#L43
+.. _lms/envs/common.py: https://github.com/edx/edx-platform/blob/master/lms/envs/common.py#L1373
+.. _lms/static/lms/js/require-config.js: https://github.com/edx/edx-platform/blob/master/lms/static/lms/js/require-config.js#L51>
+.. _npmjs.com: https://www.npmjs.com/
+.. _semver.org: http://semver.org/
 
 .. _
 
