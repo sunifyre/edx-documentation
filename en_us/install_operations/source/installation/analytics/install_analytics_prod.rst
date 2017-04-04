@@ -181,3 +181,163 @@ Installation Details
     ansible-playbook -i localhost, -c local analytics_single.yml --extra-vars "INSIGHTS_LMS_BASE=mysite.org"
     # (If your site uses https, change the scheme and set the oauth flag to true. Enforce_secure means "insist on https".)
     # wait for a while
+#. Sanity Checks
+
+   a. Run the built-in "compute pi" hadoop job
+      ::
+       sudo su - hadoop
+       cd /edx/app/hadoop
+       hadoop jar hadoop-2.3.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.3.0.jar pi 2 100
+       # it should compute something approximating pi
+
+   b. Make sure you can run hive
+      ::
+       /edx/app/hadoop/hive/bin/hive
+       # hive should start,
+       # use ^D to get back to your regular user
+
+   c. The Insights application should be up - go to insights.mysite.org and make sure the home page is there. You won't
+      be able to login yet.
+      ::
+       # Insights gunicorn is on port 8110
+       curl localhost:8110
+       
+       # Insights nginx (the externally-facing view) should be on port 18110
+       curl mybox.org:18110
+
+#. Place some test logs into HDFS
+
+   a. copy some log files into the hdfs system
+      ::
+       # scp tracking.log onto the machine from your LMS. Then do the following:
+       sudo mkdir /edx/var/log/tracking
+       sudo cp /path/to/tracking.log /edx/var/log/tracking
+       sudo chown hadoop /edx/var/log/tracking/tracking.log
+       # wait 60 seconds - ansible creates a cron job to load files in that directory every minute
+
+       # check that it exists
+       hdfs dfs -ls /data
+        
+       # should find this:
+       Found 1 items
+       -rw-r--r--   1 hadoop supergroup     308814 2015-10-15 14:31 /data/tracking.log
+
+   b. Setup the pipeline
+      ::
+       ssh-keygen -t rsa -f ~/.ssh/id_rsa -P ''
+       echo >> ~/.ssh/authorized_keys # Make sure there's a newline at the end
+       cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+       # check: ssh localhost "echo It worked!" -- make sure it works.
+         
+       # Make a new virtualenv -- otherwise will have conflicts
+       virtualenv pipeline
+       . pipeline/bin/activate
+           
+       git clone https://github.com/edx/edx-analytics-pipeline
+       cd edx-analytics-pipeline
+         
+       make bootstrap
+
+   c. Check the pipeline installation by running a simple job to count events per day. There are many parameters to
+      setup the pipeline before running the job. We'll be able to use `--skip-setup` below. The user should be set to the
+      current user (htat has the ssh self-login setup).
+      ::
+       # Ensure you're in the pipeline virtualenv 
+       remote-task --host localhost \
+         --repo https://github.com/edx/edx-analytics-pipeline \
+	 --user ubuntu \
+	 --override-config $HOME/edx-analytics-pipeline/config/devstack.cfg \
+	 --wheel-url http://edx-wheelhouse.s3-website-us-east-1.amazonaws.com/Ubuntu/precise \
+	 --remote-name analyticstack \
+	 --wait TotalEventsDailyTask \
+	 --interval 2015 \
+	 --output-root hdfs://localhost:9000/output/ \
+	 --local-scheduler
+
+#. Finish the rest of the pipeline configuration
+
+   a. Write config files for the pipeline so that it knows where the LMS database is:
+      ::
+       sudo vim /edx/etc/edx-analytics-pipeline/input.json
+       # put in the right url and credentials for your LMS database
+
+   b. Test it
+      ::
+	 remote-task --host localhost \
+	   --user ubuntu \
+	   --remote-name analyticstack \
+	   --skip-setup \
+	   --wait ImportEnrollmentsIntoMysql \
+	   --interval 2016 \
+	   --local-scheduler
+
+   c. Confirm the test succeeded
+      ::
+       sudo mysql
+       SELECT * FROM reports.course_enrollment_daily;
+       # This should show you enrollments over time. Note that this only counts enrollment in the event logs -
+       if you manually created users or enrollments in the database, they won't be counted here.
+
+#. Finish the LMS -> Insights SSO configuration via LMS OAuth Trusted Client Registration. You'll be setting up the
+   connection between Insights and the LMS, so single sign on will work.
+
+   a. Run the following Django Management command *on the LMS machine*
+      ::
+       sudo su edxapp
+       /edx/bin/python.edxapp /edx/bin/manage.edxapp lms --setting=aws create_oauth2_client \
+         http://107.21.156.121:18110 \
+	 http://107.21.156.121:18110/complete/edx-oidc/ \
+	 confidential \
+	 --client_name insights \
+	 --client_id YOUR_OAUTH2_KEY \
+	 --client_secret secret \
+	 --trusted
+         
+       # Replace "secret", "YOUR_OAUTH2_KEY", and the url of your Insights box.
+       # INSIGHTS_BASE_URL
+       # INSIGHTS_OAUTH2_KEY
+       # INSIGHTS_OAUTH2_SECRET
+       # Also set other secrets to more secret values.
+         
+       # Ensure that JWT_ISSUER and OAUTH_OIDC_ISSUER on the LMS in /edx/app/edxapp/lms.env.json match the url root in
+       # /edx/etc/insights.yml (SOCIAL_AUTH_EDX_OIDC_URL_ROOT). This should be the case unless your environment is weird
+       (ala edx sandboxes are really username.sandbox.edx.org but the setting is "int.sandbox.edx.org")
+
+   b. Check it by logging into LMS as a staff user, then ensure that you can log into Insights and see all the courses
+      you have staff access to.
+
+#. Automate copying of logs. You probably don't want to do it manually every time. Some options:
+
+   a. Create a cron job that copies all of the logs from the LMS servers regularly.
+
+   b. Create a job to copy logsto S3 and use S3 as your HDFS store (and update your config accordingly).
+
+#. Schedule `launch-task` jobs to actually run all the pipeline tasks regularly.
+
+   a. Here is the list of tasks: https://github.com/edx/edx-analytics-pipeline/wiki/Tasks-to-Run-to-Update-Insights
+      ::
+       # Ensure you're in the pipeline virtualenv
+       remote-task --host localhost \
+         --user ubuntu \
+	 --remote-name analyticstack \
+	 --skip-setup \
+	 --wait CourseActivityWeeklyTask \
+	 --local-scheduler \
+         --end-date $(date +%Y-%m-%d -d "today") \
+         --weeks 24 \
+         --n-reduce-tasks 1   # number of reduce slots in your cluster -- we only have 1
+
+
+************
+Resources
+************
+#. Link to ansible playbook we use: https://github.com/edx/configuration/blob/master/playbooks/edx-east/analytics_single.yml
+#. Devstack docs: http://edx.readthedocs.org/projects/edx-installing-configuring-and-running/en/latest/devstack/analytics_devstack.html
+#. https://github.com/edx/edx-analytics-configuration
+#. http://edx.readthedocs.io/projects/edx-installing-configuring-and-running/en/latest/installation/analytics/index.html (where this doc should live)
+#. https://github.com/edx/edx-analytics-pipeline/wiki/Tasks-to-Run-to-Update-Insights
+#. Mailing list: https://groups.google.com/forum/#!forum/openedx-analytics
+
+
+
+
