@@ -123,40 +123,47 @@ Installation Details
 ***********************
 
 #. Gather information:
+   
     a. url to your LMS. e.g. lms.mysite.org
+       
     b. url and credentials to your LMS DB. e.g. mysql.mysite.org
-#. Create a box to use for the analytics stack. e.g. analytics.mysite.org.
+       
+#. Create a box to use for the analytics stack (e.g. analytics.mysite.org).
+   
     a. We started with a blank ubuntu 12.04 AMI on AWS (NOTE: there are known issues upgrading to 14.04 –
-        changed package names, etc. They are probably easily solvable, but we haven't done it yet)
-    b. Ensure that this box can talk to the LMS via HTTP
-       ::
+       changed package names, etc. They are probably easily solvable, but we haven't done it yet)
+	
+    b. Ensure that this box can talk to the LMS via HTTP ::
+
         curl lms.mysite.org
 
-    c. Ensure that this box can connect to the DB:
-       ::
+    c. Ensure that this box can connect to the DB ::
+
         telnet mysql.mysite.org 3306
 
-    d. Ensure that the box has the following ports open:
-       ::
+    d. Ensure that the box has the following ports open ::
+
         80 -- for insights (actually 18110 at the moment -- should be changed)
 
-    e. Install git and python tools:
-       ::
+    e. Install git and python tools ::
+
         sudo apt-get update
         sudo apt-get install git
         sudo apt-get install python-pip
         sudo apt-get install python-dev
         sudo pip install virtualenv
 
-    f. Create a new virtual environment
-       ::
+    f. Create a new virtual environment ::
+
         virtualenv ansible
         . ansible/bin/activate
 
 #. Run ansible to set up most of the services. This script will do the following:
 
    a. Install and configure hadoop, hive and sqoop
+      
    b. Configure SSH daemon on the hadoop master node
+      
    c. Configure the result store database
       
     1. Setup databases
@@ -172,8 +179,8 @@ Installation Details
     1. API shared secret
     2. Tell insights where the LMS is
        
-   The script:
-   ::
+   The script: ::
+
     git clone https://github.com/edx/configuration.git
     cd configuration/
     pip install -r requirements.txt
@@ -183,22 +190,22 @@ Installation Details
     # wait for a while
 #. Sanity Checks
 
-   a. Run the built-in "compute pi" hadoop job
-      ::
+   a. Run the built-in "compute pi" hadoop job ::
+
        sudo su - hadoop
        cd /edx/app/hadoop
        hadoop jar hadoop-2.3.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.3.0.jar pi 2 100
        # it should compute something approximating pi
 
-   b. Make sure you can run hive
-      ::
+   b. Make sure you can run hive ::
+
        /edx/app/hadoop/hive/bin/hive
        # hive should start,
        # use ^D to get back to your regular user
 
    c. The Insights application should be up - go to insights.mysite.org and make sure the home page is there. You won't
-      be able to login yet.
-      ::
+      be able to login yet. ::
+
        # Insights gunicorn is on port 8110
        curl localhost:8110
        
@@ -207,8 +214,8 @@ Installation Details
 
 #. Place some test logs into HDFS
 
-   a. copy some log files into the hdfs system
-      ::
+   a. copy some log files into the hdfs system ::
+
        # scp tracking.log onto the machine from your LMS. Then do the following:
        sudo mkdir /edx/var/log/tracking
        sudo cp /path/to/tracking.log /edx/var/log/tracking
@@ -222,8 +229,8 @@ Installation Details
        Found 1 items
        -rw-r--r--   1 hadoop supergroup     308814 2015-10-15 14:31 /data/tracking.log
 
-   b. Setup the pipeline
-      ::
+   b. Setup the pipeline ::
+
        ssh-keygen -t rsa -f ~/.ssh/id_rsa -P ''
        echo >> ~/.ssh/authorized_keys # Make sure there's a newline at the end
        cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
@@ -240,8 +247,8 @@ Installation Details
 
    c. Check the pipeline installation by running a simple job to count events per day. There are many parameters to
       setup the pipeline before running the job. We'll be able to use `--skip-setup` below. The user should be set to the
-      current user (htat has the ssh self-login setup).
-      ::
+      current user (htat has the ssh self-login setup). ::
+
        # Ensure you're in the pipeline virtualenv 
        remote-task --host localhost \
          --repo https://github.com/edx/edx-analytics-pipeline \
@@ -256,13 +263,13 @@ Installation Details
 
 #. Finish the rest of the pipeline configuration
 
-   a. Write config files for the pipeline so that it knows where the LMS database is:
-      ::
+   a. Write config files for the pipeline so that it knows where the LMS database is: ::
+
        sudo vim /edx/etc/edx-analytics-pipeline/input.json
        # put in the right url and credentials for your LMS database
 
-   b. Test it
-      ::
+   b. Test it ::
+
 	 remote-task --host localhost \
 	   --user ubuntu \
 	   --remote-name analyticstack \
@@ -271,8 +278,8 @@ Installation Details
 	   --interval 2016 \
 	   --local-scheduler
 
-   c. Confirm the test succeeded
-      ::
+   c. Confirm the test succeeded ::
+
        sudo mysql
        SELECT * FROM reports.course_enrollment_daily;
        # This should show you enrollments over time. Note that this only counts enrollment in the event logs -
@@ -281,8 +288,8 @@ Installation Details
 #. Finish the LMS -> Insights SSO configuration via LMS OAuth Trusted Client Registration. You'll be setting up the
    connection between Insights and the LMS, so single sign on will work.
 
-   a. Run the following Django Management command *on the LMS machine*
-      ::
+   a. Run the following Django Management command *on the LMS machine* ::
+
        sudo su edxapp
        /edx/bin/python.edxapp /edx/bin/manage.edxapp lms --setting=aws create_oauth2_client \
          http://107.21.156.121:18110 \
@@ -314,8 +321,8 @@ Installation Details
 
 #. Schedule `launch-task` jobs to actually run all the pipeline tasks regularly.
 
-   a. Here is the list of tasks: https://github.com/edx/edx-analytics-pipeline/wiki/Tasks-to-Run-to-Update-Insights
-      ::
+   a. Here is the list of tasks: https://github.com/edx/edx-analytics-pipeline/wiki/Tasks-to-Run-to-Update-Insights ::
+
        # Ensure you're in the pipeline virtualenv
        remote-task --host localhost \
          --user ubuntu \
@@ -331,12 +338,12 @@ Installation Details
 ************
 Resources
 ************
-#. Link to ansible playbook we use: https://github.com/edx/configuration/blob/master/playbooks/edx-east/analytics_single.yml
-#. Devstack docs: http://edx.readthedocs.org/projects/edx-installing-configuring-and-running/en/latest/devstack/analytics_devstack.html
-#. https://github.com/edx/edx-analytics-configuration
-#. http://edx.readthedocs.io/projects/edx-installing-configuring-and-running/en/latest/installation/analytics/index.html (where this doc should live)
-#. https://github.com/edx/edx-analytics-pipeline/wiki/Tasks-to-Run-to-Update-Insights
-#. Mailing list: https://groups.google.com/forum/#!forum/openedx-analytics
+- Link to ansible playbook we use: https://github.com/edx/configuration/blob/master/playbooks/edx-east/analytics_single.yml
+- Devstack docs: http://edx.readthedocs.org/projects/edx-installing-configuring-and-running/en/latest/devstack/analytics_devstack.html
+- https://github.com/edx/edx-analytics-configuration
+- http://edx.readthedocs.io/projects/edx-installing-configuring-and-running/en/latest/installation/analytics/index.html (where this doc should live)
+- https://github.com/edx/edx-analytics-pipeline/wiki/Tasks-to-Run-to-Update-Insights
+- Mailing list: https://groups.google.com/forum/#!forum/openedx-analytics
 
 
 
