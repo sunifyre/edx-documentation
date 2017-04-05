@@ -35,7 +35,7 @@ If you have enabled cohorts in your course, you can use content groups to
 designate particular components in your course as visible only to specific
 groups of learners. For an example, you intend all learners in your course to
 have substantially the same course experience, with the exception that only
-learners who are either alumni or current students of your university are shown a video message from various university officials at the end of a section. By placing alumni and current university students
+learners who are either alumni or current students of your university are shown a video message from various university officials at the end of a section. By placing alumni and current university students in cohorts, and associating these cohorts with a content group, you
 
 
 
