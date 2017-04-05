@@ -1,4 +1,4 @@
-.. _Installing the Open edX Analytics Stack in Production
+.. _Installing the Open edX Analytics Stack in Production:
 
 #################################################
 Installing Open edX Analytics in Production
