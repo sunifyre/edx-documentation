@@ -255,23 +255,23 @@ The **Visibility Settings** icon for the component is now black.
    :width: 200
 
 The publishing details for the course section in the sidebar indicate that some
-content is visible only to particular groups.
+content is visible only to specific groups of learners.
 
-.. image:: ../../../../shared/images/Cohorts_OnlyVisibleToParticularGroups.png
+.. image:: ../../../../shared/images/Content_OnlyVisibleToParticularGroups.png
    :alt: Course outline sidebar showing showing a black unit visibility icon
      and the note indicating that some content in the unit is visible only to a
      particular group.
    :width: 300
 
-For details about previewing your course to ensure that students in a cohort
+For details about previewing your course to ensure that learners in a cohort
 correctly see the content intended for them, see :ref:`Viewing Cohort Specific
 Courseware`.
 
 .. note:: In addition to visibility settings for content groups, a learner's
-   ability to see a course component also depends on whether it is hidden from
-   students, whether the unit is published, and the course's release date. For
-   details about testing course content in general, see :ref:`Testing Your
-   Course Content`.
+   ability to see a course component also depends on whether it is marked as
+   visible to staff only, whether the unit is published, and the course's
+   release date. For details about testing course content in general, see
+   :ref:`Testing Your Course Content`.
 
 .. _Associate Cohorts with Content Groups:
 
@@ -337,7 +337,7 @@ members of each group correctly see the content intended for them.
 Depending on whether you want to view published content or unpublished content,
 you choose either **View Live** or **Preview** from the course outline in
 Studio. You can then experience the course content as a learner in a particular
-group would, by selecting the **View this course as** option for a student in
+group would, by selecting the **View this course as** option for a learner in
 the desired content group, as described in :ref:`Roles for Viewing Course
 Content`.
 

@@ -14,8 +14,9 @@ see :ref:`Developing Your Course Index`.
    :maxdepth: 2
 
    cohorts/index
+   diff_content_oview
    teams/index
-   content_experiments/index
    credit_courses/index
+   content_experiments/index
    timed_exams
    lti/index
