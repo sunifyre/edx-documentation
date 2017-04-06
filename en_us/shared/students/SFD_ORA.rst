@@ -160,9 +160,9 @@ steps.
 
    .. note::
 
-      In some assignments, you can submit an image or other type of file to
-      accompany your written response. If you are allowed to upload a file in
-      your assignment, **Browse** and **Upload your file** options are
+      In some assignments, you can submit images or other types of file to
+      accompany your written response. If you are allowed to upload files in
+      your assignment, **Browse** and **Upload your files** options are
       available below the response field.
 
       For information about uploading images or other files in your ORA
@@ -190,15 +190,13 @@ back later, just refresh or reopen your browser when you come back.
 Submit a File with Your Response
 ***********************************
 
-If your assignment requires you to submit an image or other type of file to
-accompany your text response, you see **Browse** and **Upload your file**
+If your assignment requires you to submit images or other types of file to
+accompany your text response, you see **Browse** and **Upload files**
 options below the response field.
 
 .. note::
 
-   * You can upload only one file with your response.
-
-   * The file that you upload must be smaller than 5 MB in size.
+   * The cumulative size of the files that you upload must be less than 10 MB.
 
    * Image files can be in .jpg, .gif, or .png format.
 
@@ -209,20 +207,19 @@ options below the response field.
      response.
 
 
-To upload a file in your response, follow these steps.
+To upload files in your response, follow these steps.
 
-#. Below the response field, select **Browse**.
+#. Below the response field, select **Choose Files**.
 
-#. Select the file that you want to upload, and then select **Open**.
+#. In the dialog box that opens, select the file that you want to upload, and
+   then select **Open**.
 
-   The name of the file that you selected for uploading appears next to **Browse**.
+#. Select **Upload files**.
 
-#. Select **Upload your file**.
+   Your files are uploaded and a preview image of each file is visible.
 
-   Your file is uploaded and a preview image is displayed.
-
-You can replace the file that you uploaded with a different one until you
-submit your response. To replace your chosen file, repeat steps 1-3.
+You can replace the files that you uploaded with different files until you
+submit your response. To replace your uploaded files, repeat steps 1-3.
 
 
 View Your Submitted Response

@@ -99,23 +99,24 @@ assessment still appear above the **Your Response** field.
 Allow Learners to Submit Files (optional)
 ============================================
 
-Before you enable this feature for your open response assessment, be sure to
-read about its limitations and best practices. For more information, see
-:ref:`Asking Learners to Upload Other Files in Responses`.
+.. note::
+  Before you enable this feature for your open response assessment, be sure to
+  read about its limitations and best practices. For more information, see
+  :ref:`Asking Learners to Upload Other Files in Responses`.
 
-To allow learners to submit a file along with their text responses, follow
+To allow learners to submit files along with their text responses, follow
 these steps.
 
 #. In the ORA component editor, select **Settings**.
 
 #. Set **Allow File Upload** to one of these options.
 
-   * **Image File**
-   * **PDF or Image File**
+   * **Image Files**
+   * **PDF or Image Files**
    * **Custom File Types**
 
 #. If you select **Custom File Types**, the **File Types** field appears. Enter
-   the file extensions, separated by commas, of the types of files that
+   the file name extensions, separated by commas, of the types of files that
    you want learners to submit.
 
    .. note:: To reduce the potential for problems from files with malicious
@@ -123,7 +124,7 @@ these steps.
     see :ref:`Prohibited File Extensions`.
 
 #. Make sure the text of your prompt includes adequate instructions for
-   learners to upload the required files, including the file type or types
+   learners to upload the required files, including the file types
    that learners can upload.
 
 .. _PA Add Rubric:

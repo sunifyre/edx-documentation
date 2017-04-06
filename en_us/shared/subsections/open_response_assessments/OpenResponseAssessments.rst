@@ -631,14 +631,14 @@ Peer Assessments
 Asking Learners to Upload Files in Responses
 *******************************************************
 
-In ORA assignments, you can ask your learners to upload an image, a .pdf file,
-or a file of another type as a part of their responses. Other learners
+In ORA assignments, you can ask your learners to upload images, .pdf files,
+or other types of files as a part of their responses. Other learners
 evaluate the responses and their accompanying files during the peer
-assessment. Offering the option to upload a file in addition to a text
+assessment. Offering the option to upload files in addition to a text
 response can give learners the opportunity to use tools and develop skills
 that are relevant to your course.
 
-Before you decide to ask learners to upload other files along with their text
+Before you decide to ask learners to upload files along with their text
 responses, however, be aware of the following limitations and best practices.
 
 * During the peer assessment step, learners download the files that other
@@ -655,11 +655,9 @@ responses, however, be aware of the following limitations and best practices.
   option to do so.
 
 * All responses must include some response text. Learners cannot submit a
-  response that contains only an uploaded file.
+  response that contains only uploaded files.
 
-* Learners can submit only one file with each response.
-
-* Files must be smaller than 5MB in size.
+* The cumulative size of all uploaded files must be less than 10 MB.
 
 * Image files must be in .jpg, .gif, or .png format.
 
