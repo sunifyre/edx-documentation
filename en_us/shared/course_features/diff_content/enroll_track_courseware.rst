@@ -36,36 +36,28 @@ Complete these steps to create track-specific content in your course.
 Enrollment Tracks
 ********************
 
-Learners select an enrollment track for a course either when they first enroll
-or at some later point in a course.
+.. Implications of learners changing tracks - what happens to their current
+.. score and progress? Is it kept? Visibility of course content will change,
+.. presumably. Learners cannot upgrade to verified track beyond the deadline
+.. but no limitation on dropping back to audit track?
+
+.. What is the behavior for grades/progress when learners unenroll and re-
+.. enroll?
 
 
+Courses can offer multiple enrollment tracks, such as a non-certificate "audit"
+track and a "verified" track that offers certificates.
 
-Implications of learners changing tracks - what happens to their current score
-and progress? Is it kept? Visibility of course content will change? Cannot
-upgrade to verified track beyond the deadline but no limitation on dropping back
-to audit track?
+Learners select an enrollment track when they first enroll in a course, and in
+some cases they will change enrollment tracks during the course run, for
+example, to upgrade from the audit track to the verified track.
 
-
-.. _View Usage of an Enrollment Track:
-
-*************************************
-View Usage of an Enrollment Track
-*************************************
-
-To view the units that are visible to learners in an enrollment track, follow
-these steps.
-
-#. In Studio, select **Settings**, then select **Group Configurations**.
-
-#. On the **Group Configurations** page, locate the enrollment track for which you
-   want to view the usage. Enrollment tracks are only shown on this page if more than one exists in the course.
-
-   The enrollment track's box displays the number of units that are designated for learners in the track, and provides links to each unit.
-
-#. Select each link to go to that unit in the **Course Outline**.
-
-For details about previewing your course to ensure that learners in an enrollment track correctly see the content intended for them, see XXXX
+In a course where you offer differentiated content based on enrollment track,
+when learners change tracks during the course run, the content that they see
+changes. Learners see only the content that you have designated as being
+available to their current enrollment track. However, if they have already
+completed course content in a different enrollment track, their existing
+grades are carried over and are reflected on the course Progress page.
 
 
 
@@ -139,6 +131,35 @@ particular enrollment track correctly see the content intended for them, see
    visible to staff only, whether the unit is published, and the course's
    release date. For details about testing course content in general, see
    :ref:`Testing Your Course Content`.
+
+
+.. _View Usage of an Enrollment Track:
+
+*************************************
+View Usage of an Enrollment Track
+*************************************
+
+To view the units that are visible to learners in an enrollment track, follow
+these steps.
+
+#. In Studio, select **Settings**, then select **Group Configurations**.
+
+#. On the **Group Configurations** page, locate the enrollment track for which
+   you want to view the usage. Enrollment tracks are only shown on this page
+   if more than one track exists in the course.
+
+   The enrollment track's box displays the number of units that are designated for learners in the track.
+
+#. Click the enrollment track name to view the names of units and components
+   that are designated for learners in the track.
+
+#. Click a linked unit name to go to that unit in the **Course Outline**,
+   where you can change that unit's :ref:`visibility settings<Content Hidden
+   from Students>`.
+
+For details about previewing your course to ensure that learners in an
+enrollment track correctly see the content intended for them, see
+:ref:`Viewing Track Specific Courseware`.
 
 
 .. _Viewing Track Specific Courseware:
