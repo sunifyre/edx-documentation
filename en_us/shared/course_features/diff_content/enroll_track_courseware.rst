@@ -36,8 +36,15 @@ Complete these steps to create track-specific content in your course.
 Enrollment Tracks
 ********************
 
-Implications of learners changing tracks - what happens to their current score and progress? Is it kept? Visibility of course content will change?
-Cannot upgrade to verified track beyond the deadline but no limitation on dropping back to audit track?
+Learners select an enrollment track for a course either when they first enroll
+or at some later point in a course.
+
+
+
+Implications of learners changing tracks - what happens to their current score
+and progress? Is it kept? Visibility of course content will change? Cannot
+upgrade to verified track beyond the deadline but no limitation on dropping back
+to audit track?
 
 
 .. _View Usage of an Enrollment Track:

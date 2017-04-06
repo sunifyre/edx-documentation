@@ -23,17 +23,22 @@ Offering Different Content to Learners in Different Enrollment Tracks
 If your course has more than one enrollment track, you can designate specific
 components as being available to learners in specific tracks. For example, you
 might provide the same content to all learners in a section but might give one
-exam to learners in the audit track and another exam for learners in the
+exam to learners in the audit track and another exam to learners in the
 verified certificate track.
+
+For more information, see :ref:`Enrollment Track Specific Courseware Overview`.
 
 
 ***********************************************************
 Offering Different Content to Learners in Different Cohorts
 ***********************************************************
 
-If you have enabled cohorts in your course, you can use content groups to
-designate particular components in your course as visible only to specific
-groups of learners. For an example, see XXX
+If you have enabled :ref:`cohorts in your course<Cohorts Overview>`, you can use
+:ref:`content groups<About Content Groups>` to designate particular components
+in your course as visible only to specific groups of learners.
+
+For information about offering different content to learners in different
+cohorts, see :ref:`Cohorted Courseware Overview`.
 
 
 
