@@ -187,26 +187,26 @@ divided by cohort instead of unified, follow these steps.
 
 #. Select **Specify whether discussion topics are divided by cohort**.
 
-  .. image:: ../../../../shared/images/CohortDiscussionsSpecifyLink.png
-    :alt: The link in the UI to specify whether content specific discussion
+   .. image:: ../../../../shared/images/CohortDiscussionsSpecifyLink.png
+     :alt: The link in the UI to specify whether content specific discussion
         topics are divided by cohort.
-    :width: 800
+     :width: 800
 
-  In the **Content-Specific Discussion Topics** section, you see that the
-  **Cohort selected content-specific discussion topics** option is selected.
-  Content-specific topics that exist are listed, but none of them should
-  be selected, indicating that these topics are not divided by cohort.
+   In the **Content-Specific Discussion Topics** section, you see that the
+   **Cohort selected content-specific discussion topics** option is selected.
+   Content-specific topics that exist are listed, but none of them should
+   be selected, indicating that these topics are not divided by cohort.
 
-#. Select **Always cohort content-specific discussion topics**.
+3. Select **Always cohort content-specific discussion topics**.
+
+   .. image:: ../../../../shared/images/CohortDiscussionsAlwaysCohort.png
+     :alt: Content specific discussion topics controls with the "Always cohort
+        content specific discussion topics" option selected.
+     :width: 500
 
 All content-specific discussion topics in the course are now divided by
 cohort, and you cannot change the cohort settings of individual content-
 specific discussion topics.
-
-.. image:: ../../../../shared/images/CohortDiscussionsAlwaysCohort.png
- :alt: Content specific discussion topics controls with the "Always cohort
-  content specific discussion topics" option selected.
- :width: 500
 
 For information about changing the cohort settings for your content-specific
 discussions to make all of them unified except a few, see :ref:`Specify Some
