@@ -26,12 +26,10 @@ within unified discussion topics are visible to all learners in the course,
 regardless of cohort.
 
 When you first enable cohorts in your course, both :ref:`course-wide
-discussion topics<Create CourseWide Discussion Topics>` and :ref:`content-
-specific discussion topics<Create ContentSpecific Discussion Topics>` are by
+discussion topics<Create CourseWide Discussion Topics>` and :ref:`content-specific discussion topics<Create ContentSpecific Discussion Topics>` are by
 default unified, so that all posts and responses are visible to all learners.
 
-.. note:: In courses that enabled cohorts prior to April 10, 2017, content-
-   specific discussion topics are by default divided by cohort.
+.. note:: In courses that enabled cohorts prior to April 10, 2017, content-specific discussion topics are by default divided by cohort.
 
 You can change discussion topics of either type to be divided or
 unified on the instructor dashboard in the LMS.
@@ -156,8 +154,8 @@ For more information about managing discussions that are divided by cohort, see
 Content-Specific Discussion Topics and Cohorts
 **********************************************
 
-When you enable the cohort feature for a course, and :ref:`create content-
-specific discussion topics<Create ContentSpecific Discussion Topics>` by
+When you enable the cohort feature for a course, and :ref:`create content-specific
+discussion topics<Create ContentSpecific Discussion Topics>` by
 adding discussion components to units in Studio, these content-specific
 discussion topics are by default unified. All learners in the course can see
 and respond to posts from all other learners. You can change content-specific
