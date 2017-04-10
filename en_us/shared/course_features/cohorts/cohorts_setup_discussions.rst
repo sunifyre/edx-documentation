@@ -205,8 +205,8 @@ divided by cohort instead of unified, follow these steps.
      :width: 500
 
 All content-specific discussion topics in the course are now divided by
-cohort, and you cannot change the cohort settings of individual content-
-specific discussion topics.
+cohort, and you cannot change the cohort settings of individual content-specific
+discussion topics.
 
 For information about changing the cohort settings for your content-specific
 discussions to make all of them unified except a few, see :ref:`Specify Some
@@ -223,18 +223,16 @@ unified when you first :ref:`add them<Create ContentSpecific Discussion
 Topics>` in your course.
 
 To specify that only some of your content-specific discussion topics are
-divided by cohort, you change the cohort settings for content-specific
-discussion topics, and then explicitly select only the topics that you want to
+divided by cohort, you explicitly select only the topics that you want to
 be divided by cohort.
 
-.. warning:: When you change the cohort setting from **Always Cohort Content-
-   Specific Discussion Topics** to **Cohort Selected Content-Specific
-   Discussion Topics**, you are making all content-specific discussion topics
-   in your course unified, unless you explicitly change them to be divided by
-   cohort before saving your changes. This means that any posts that were
-   previously divided by cohort and restricted to viewing, responding, and
-   commenting by members of the same cohort are now visible to all learners in
-   your course.
+.. warning:: If you change the cohort setting from **Always Cohort Content-Specific
+   Discussion Topics** to **Cohort Selected Content-Specific
+   Discussion Topics**, all content-specific discussion topics are unified,
+   unless you explicitly specify that they are divided by cohort before saving
+   your changes. This means that any posts that were previously divided by
+   cohort and restricted to viewing, responding, and commenting by members of
+   the same cohort are now visible to all learners in your course.
 
    If you make changes to cohort settings in a running course, be aware of the
    implications of your changes. For more details, see :ref:`Altering Cohort
