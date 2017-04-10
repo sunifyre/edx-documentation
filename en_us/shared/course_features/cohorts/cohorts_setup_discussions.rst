@@ -166,8 +166,9 @@ If you want all content-specific discussion topics in your course to be always
 divided by cohort, follow the steps in the topic :ref:`Specify that All
 ContentSpecific Discussion Topics are Cohorted`.
 
-To make :ref:`only a few discussion topics divided by cohort, follow the steps
-in the topic <Specify Some ContentSpecific Discussion Topics as Cohorted>`.
+If you want only some content-specific discussion topics to be divided by
+cohorts, following the steps in the topic :ref:`Specify Some ContentSpecific
+Discussion Topics as Cohorted`.
 
 .. _Specify that All ContentSpecific Discussion Topics are Cohorted:
 
